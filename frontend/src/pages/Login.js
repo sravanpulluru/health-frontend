@@ -1,45 +1,37 @@
 import React, { useState } from "react";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-export default function Login({ onLogin }) {
-  const [email, setEmail] = useState("");
+export default function LoginPage() {
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setMessage("🔄 Logging in...");
 
-    try {
-      const res = await axios.post("https://health-backend-04x7.onrender.com/api/auth/login", {
-        email,
-        password,
-      });
-
-      if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
-        setMessage("✅ Login successful!");
-        onLogin && onLogin(res.data.user);
-      }
-    } catch (err) {
-      console.error(err);
-      setMessage("❌ Login failed. Please check your email & password.");
+    // ✅ Hardcoded login check
+    if (username === "user" && password === "user123") {
+      localStorage.setItem("isLoggedIn", "true");
+      navigate("/resources"); // redirect after login
+    } else {
+      setError("❌ Invalid username or password");
     }
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center" style={{ minHeight: "100vh" }}>
-      <div className="card p-4 shadow" style={{ backgroundColor: "#222", color: "white", width: "100%", maxWidth: "400px" }}>
-        <h3 className="text-center mb-4">🔐 Login</h3>
+    <div className="d-flex justify-content-center align-items-center vh-100 bg-dark text-white">
+      <div className="p-4 rounded shadow-lg" style={{ maxWidth: "400px", width: "100%" }}>
+        <h2 className="text-center mb-4">🔐 Login</h2>
+        {error && <div className="alert alert-danger">{error}</div>}
         <form onSubmit={handleSubmit}>
           <div className="mb-3">
-            <label className="form-label">Email</label>
+            <label className="form-label">Username</label>
             <input
-              type="email"
-              className="form-control bg-dark text-white"
-              placeholder="Enter email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              type="text"
+              className="form-control bg-dark text-white border-light"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
           </div>
@@ -47,23 +39,16 @@ export default function Login({ onLogin }) {
             <label className="form-label">Password</label>
             <input
               type="password"
-              className="form-control bg-dark text-white"
-              placeholder="Enter password"
+              className="form-control bg-dark text-white border-light"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
-          <button className="btn btn-outline-light w-100" type="submit">
+          <button type="submit" className="btn btn-light w-100">
             Login
           </button>
         </form>
-        {message && <div className="alert alert-info mt-3">{message}</div>}
-        <div className="mt-3 small text-center">
-          <strong>Default Admin:</strong><br />
-          Email: <code>admin@health.com</code><br />
-          Password: <code>admin123</code>
-        </div>
       </div>
     </div>
   );
