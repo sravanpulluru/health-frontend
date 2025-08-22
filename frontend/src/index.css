@@ -1,0 +1,10 @@
+
+:root { color-scheme: dark; }
+body { background-color:#121212; color:#fff; min-height:100vh; }
+.card { background:#1e1e2f; border:none; border-radius:12px; box-shadow:0 0 15px rgba(0,212,255,0.1); }
+.form-control, .form-select { background:#000 !important; color:#fff !important; border:1px solid #444; }
+.navbar { background:#000 !important; }
+.navbar-brand { color:#00d4ff !important; font-weight:bold; }
+.list-group-item { background:#0f0f0f; color:#fff; border-color:#222; }
+.btn-outline-light { border-color:#777; }
+a { color:#7bdcff; }
